@@ -1,7 +1,6 @@
 #include <iostream>
-#include <string>
 
-using namespace std;                                                                    //here is my programming from 5.4, i think it still works
+using namespace std;
 
 // Function to double a digit and sum its individual digits
 int doubleAndSum(int digit) {
@@ -10,15 +9,15 @@ int doubleAndSum(int digit) {
 }
 
 // Function to verify the credit card number
-bool verifyCreditCard(const string& cardNumber) {
+bool isCardValid(int digits[], int size) {
     int sum1 = 0;
     int sum2 = 0;
 
     // Iterate through the card number digits from right to left
-    for (int i = cardNumber.length() - 1; i >= 0; i--) {
-        int digit = cardNumber[i] - '0';
+    for (int i = size - 1; i >= 0; i--) {
+        int digit = digits[i];
 
-        if ((cardNumber.length() - i) % 2 == 0) {
+        if ((size - i) % 2 == 0) {
             // Step 1: Double each of the digits and sum their individual digits
             sum2 += doubleAndSum(digit);
         }
@@ -36,15 +35,28 @@ bool verifyCreditCard(const string& cardNumber) {
 }
 
 int main() {
-    string cardNumber;
-    cout << "Enter the credit card number: ";
-    cin >> cardNumber;
+    int cardNumber;
+    while (true) {
+        cout << "Enter 8-digit credit card # or Q to quit: ";
+        if (!(cin >> cardNumber)) {
+            // Input is not an integer, quit the program
+            break;
+        }
 
-    if (verifyCreditCard(cardNumber)) {
-        cout << "The credit card number is valid." << endl;
-    }
-    else {
-        cout << "The credit card number is invalid." << endl;
+        int digits[8];
+        // Extract each digit from the card number and store it in an array
+        for (int i = 7; i >= 0; i--) {
+            digits[i] = cardNumber % 10;
+            cardNumber /= 10;
+        }
+
+        // Check if the card number is valid
+        if (isCardValid(digits, 8)) {
+            cout << "Card is valid." << endl;
+        }
+        else {
+            cout << "Card is not valid." << endl;
+        }
     }
 
     return 0;
